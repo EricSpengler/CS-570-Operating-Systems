@@ -1,0 +1,390 @@
+Return-Path: <cssc0095@edoras.sdsu.edu>
+X-Original-To: cssc0095
+Delivered-To: cssc0095@edoras.sdsu.edu
+Received: by edoras.sdsu.edu (Postfix, from userid 1207)
+	id 7C1616000048; Mon, 16 Sep 2019 14:11:12 -0700 (PDT)
+Date: Mon, 16 Sep 2019 14:11:12 -0700
+To: cssc0095@edoras.sdsu.edu
+Subject: CS570 Program 1 results
+User-Agent: Heirloom mailx 12.5 7/5/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-Id: <20190916211112.7C1616000048@edoras.sdsu.edu>
+From: cssc0095@edoras.sdsu.edu (Eric Spengler)
+
+This is a **preliminary** test of your upcoming Program 1.
+Due dates for our programs can be found in the ~cs570/calendar file on edoras.
+
+This message, which will appear to be mailed from your account, is intended to
+show you some (but not necessarily all) of the checks that will be made on your
+assignment when the due date actually arrives.  This is NOT the actual version
+that will be graded, but only an attempt to give you early warning of any
+potential problems.  Point totals in the final graded version may differ.
+
+[Standard Disclaimer:]
+These practice tests are intended to show bugs, but also to reveal places
+where you may not be following all the automatic grader's nitpicking
+requirements.  If you receive failure warnings on the preliminary tests
+and then also have difficulty during the graded event, you have very little
+recourse.  To take full advantage of the feedback provided in this course,
+you must do the assignments in a timely fashion.
+jc
+
+Login     Name            Tty      Idle  Login Time   Office     Office Phone   Host
+cssc0095  Eric Spengler   pts/26      *  Sep 16 01:02                           (70.181.188.171)
+
+Checking Program 1:
+total 16
+drwx------  3 cssc0095   25 Sep  5 23:14 Four/
+drwx------ 10 cssc0095 4096 Sep  5 23:11 Maildir/
+drwx------  3 cssc0095 4096 Sep 15 18:16 One/
+-rw-------  1 cssc0095 1733 Aug 27 00:14 README
+drwx------  3 cssc0095   25 Sep  5 23:14 Three/
+drwx------  3 cssc0095   33 Sep  5 23:14 Two/
+drwxr-xr-x  3 cssc0095 4096 Sep 13 15:13 Zero/
+lrwxrwxrwx  1 cssc0095   31 Aug 28 08:38 calendar -> /home/cs/faculty/cs570/calendar
+drwx------  3 cssc0095   37 Sep 13 15:00 github/
+Test 0... checking for the proper directory:
+total 32
+-rw-r--r-- 1 cssc0095  3250 Sep 13 14:17 getword.c
+lrwxrwxrwx 1 cssc0095    36 Aug 30 20:34 getword.h -> /home/cs/faculty/cs570/One/getword.h
+-rw------- 1 cssc0095  6552 Sep 15 18:16 getword.o
+-rw-r--r-- 1 cssc0095   359 Aug 30 20:35 gradernotes
+lrwxrwxrwx 1 cssc0095    35 Aug 30 20:34 makefile -> /home/cs/faculty/cs570/One/makefile
+-rwx------ 1 cssc0095 11480 Sep 15 18:16 p1*
+lrwxrwxrwx 1 cssc0095    31 Aug 30 20:33 p1.c -> /home/cs/faculty/cs570/One/p1.c
+-rw------- 1 cssc0095  3408 Sep 15 18:16 p1.o
+drwx------ 2 cssc0095   106 Sep 13 14:17 p1autograder/
+Test 1... testing will proceed only if you have created the proper file:
+ls -lo ~/One/getword.c
+-rw-r--r-- 1 cssc0095 3250 Sep 13 14:17 /home/cs/carroll/cssc0095/One/getword.c
+
+1    /*
+2    I wrote this code myself with the help of L.S.Fosters "C By Discovery" and 
+the inout2.c file.  
+3    This program parses through the input stream and extracts out each individu
+al word, returning
+4    the size of the word as well as pushing the characters onto the input buffe
+r for display. 
+5     
+6    Eric Spengler
+7    09/04/19
+8    Dr. John Carroll
+9    CS570
+10   */
+11   
+12   #include "getword.h"
+13   
+14   int getword(char *word)
+15   {
+16   	//counter for the number of chars in the word
+17   	int numChars = 0;
+18   	//stdin input variable
+19   	int input;
+20   	//looping through the input stream until EOF or a break from inside the 
+loop
+21   	while (numChars < 254 && (input = getchar()) != EOF)
+22   	{
+23   		//ignoring spaces from the input or exiting the loop if the word
+ is finished due to a space
+24   		if (numChars > 0 && input == ' ')
+25   		{
+26   			break;
+27   		}
+28   		else if (input == ' ')
+29   		{
+30   			continue;
+31   		}
+32   		//pushing newline back on the input stream if at the end of a wo
+rd so that it can be read by itself
+33   		if (numChars > 0 && input == '\n')
+34   		{
+35   			ungetc('\n', stdin);
+36   			break;
+37   		}
+38   		//dealing with newline if it's the first char from the input str
+eam
+39   		else if (input == '\n')
+40   		{
+41   			word[numChars] = '\0';	
+42   			return 0;
+43   		}
+44   		//dealing with the input of '\' displaying the char that follows
+ it except newline
+45   		if (input == '\\')
+46   		{
+47   			if ((input = getchar()) != EOF)
+48   			{
+49   				if (input == '\n')
+50   				{
+51   					ungetc(input, stdin);
+52   					break;
+53   				}	
+54   				word[numChars] = input;
+55   				numChars++;
+56   				continue;
+57   			}
+58   			else
+59   			{
+60   				break;
+61   			}
+62   			continue;
+63   		}
+64   		//putting the designated special chars back on the input stream 
+if attached to a word so that it cant be read by itself
+65   		else if (numChars > 0 && (input == '<' || input == '>' || input 
+== '|' || input == '#' || input == '&'))
+66   		{
+67   			ungetc(input, stdin);
+68   			break;
+69   		}
+70   		//handling the special chars '<' '|' '#' '&' if they are the fir
+st chars on the input stream
+71   		else if (input == '<' || input == '|' || input == '#' || input =
+= '&')
+72   		{
+73   			word[numChars] = input;
+74   			numChars++;
+75   			break;
+76   		}
+77   		//handling the special chars '>' '>>' '>&' '>>&' if they are the
+ first chars on the input stream 
+78   		//if a nonspecial char is read, it is put back on the input stre
+am and the loop ends
+79   		//'>'
+80   		else if (input == '>')
+81   		{
+82   			word[numChars] = input;
+83   			numChars++;
+84   			if ((input = getchar()) != EOF)
+85   			{
+86   				//'>>'
+87   				if (input == '>')
+88   				{		
+89   					word[numChars] = input;
+90   					numChars++;
+91   					if ((input = getchar()) != EOF)
+92   					{
+93   						//'>>&'
+94   						if (input == '&')
+95   						{
+96   							word[numChars] = input;
+97   							numChars++;
+98   							break;
+99   						}
+100  						else
+101  						{
+102  							ungetc(input, stdin);
+103  							break;
+104  						}
+105  					}
+106  					else
+107  					{
+108  						break;
+109  					}
+110  				}
+111  				//'>&'
+112  				else if (input == '&')
+113  				{
+114  					word[numChars] = input;
+115  					numChars++;
+116  					break;
+117  				}
+118  				else
+119  				{
+120  					ungetc(input, stdin);
+121  					break;
+122  				}
+123  			}
+124  			else
+125  			{
+126  				break;
+127  			}
+128  		}
+129  		word[numChars] = input;
+130  		numChars++;
+131  	}
+132          //adding null terminator to input buffer 
+133          word[numChars] = '\0';	
+134  	//handling EOF
+135  	if (numChars == 0 && input == EOF)
+136  	{
+137  		return -1;
+138  	}
+139  	//handling 'done' to return -1
+140  	if (word[0] == 'd' && word[1] == 'o' && word[2] == 'n' && word[3] == 'e'
+ && word[4] == '\0')
+141  	{
+142  		return -1;
+143  	}	
+144  	//returning the number of chars
+145  	return numChars;
+146  }
+
+Test 2... is getword.c documented?
+(Your getword.c documentation does NOT have to repeat the specs in getword.h,
+but it should contain your name, instructor name [NOTE: 'Carroll' contains two
+'R's and two 'L's], class (that is, 'CS570'), due date, etc.)
+One point was possible here; your total is now 1/1
+
+Test 3... how is the syntax?
+splint -warnposix +trytorecover -weak getword.c
+Splint 3.1.2 --- 11 Oct 2015
+
+Finished checking --- no warnings
+
+NOTE: not everything that 'splint' comments about is necessarily a bad thing;
+for example, splint may complain if you don't save the value that ungetc()
+returns (even if this may be a perfectly reasonable thing to ignore).
+
+Test 4... Does the gradernotes file exist?
+Yes.
+Your gradernotes file contains:
+1:I wrote this code myself with the help of L.S.Fosters "C By Discovery" and the inout2.c file.
+2:
+3:This program has no known bugs.
+4:
+5:This program parses through the input stream and extracts out each individual word, returning
+6:the size of the word as well as pushing the characters onto the input buffer for display.
+7:
+8:Eric Spengler
+9:09/04/19
+10:Dr. John Carroll
+11:CS570
+
+A human will have to read and evaluate the contents of gradernotes.
+Double-check that you have BOTH required statements in gradernotes! 
+
+Test 5: checking the soft links...
+Is the getword.h soft link in place?
+ls -l ~cssc0095/One/getword.h
+lrwxrwxrwx 1 cssc0095 carroll 36 Aug 30 20:34 /home/cs/carroll/cssc0095/One/getword.h -> /home/cs/faculty/cs570/One/getword.h
+Yes.
+Is the makefile soft link in place?
+ls -l ~cssc0095/One/makefile
+lrwxrwxrwx 1 cssc0095 carroll 35 Aug 30 20:34 /home/cs/carroll/cssc0095/One/makefile -> /home/cs/faculty/cs570/One/makefile
+Yes.
+Is the p1.c soft link in place?
+ls -l ~cssc0095/One/p1.c
+lrwxrwxrwx 1 cssc0095 carroll 31 Aug 30 20:33 /home/cs/carroll/cssc0095/One/p1.c -> /home/cs/faculty/cs570/One/p1.c
+Yes.
+Unless ALL these are right, you could LOSE a point here; your total is now 1/1
+
+Test 6... does your program compile?
+make clean; make
+rm -f *.o p1
+gcc -g   -c -o getword.o getword.c
+gcc -g   -c -o p1.o p1.c
+gcc -o p1 getword.o p1.o
+[1] 21747
+
+Test 7... are all the program0 specs met?
+Here is the result of ~cssc0095/One/p1 < ~cs570/Data1/input1 :
+
+Your output was:
+n=6, s=[eschew]
+n=0, s=[]
+n=0, s=[]
+n=11, s=[obfuscation]
+n=0, s=[]
+n=0, s=[]
+n=-1, s=[]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+Three more points were possible here; your total is now 4/4
+
+Test 8... does your program recognize metacharacters?
+Here is the result of ~cssc0095/One/p1 < ~cs570/Data1/input2 :
+
+Your output was:
+n=2, s=[>>]
+n=3, s=[>>&]
+n=1, s=[<]
+n=1, s=[&]
+n=1, s=[ ]
+n=0, s=[]
+n=-1, s=[]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+Three more points were possible here; your total is now 7/7
+
+Test 9... how does your program react to backslash-metacharacters?
+Here is the result of ~cssc0095/One/p1 < ~cs570/Data1/input3 :
+
+Your output was:
+n=12, s=[one>stillone]
+n=1, s=[>]
+n=2, s=[>&]
+n=1, s=[<]
+n=1, s=[<]
+n=5, s=[five\]
+n=0, s=[]
+n=-1, s=[done]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+Two more points were possible here; your total is now 9/9
+
+Test 10... does your program handle special conditions correctly?
+Here is the result of ~cssc0095/One/p1 < ~cs570/Data1/input4 :
+
+Your output was:
+n=1, s=[a]
+n=8, s=[ONE-line]
+n=4, s=[file]
+n=0, s=[]
+n=14, s=[not quite done]
+n=-1, s=[done]
+
+n=1, s=[a]
+n=8, s=[ONE-line]
+n=4, s=[file]
+n=0, s=[]
+n=14, s=[not quite done]
+n=-1, s=[done]
+
+A diff of the correct output with your output shows:
+
+                              No differences encountered -- CONGRATULATIONS
+
+Three more points were possible here; your total is now 12/12
+
+Test 11... does your program handle buffer overruns correctly?
+Here is the result of ~cssc0095/One/p1 < ~cs570/Data1/input5 :
+
+Your output was:
+n=5, s=[word1]
+n=1, s=[|]
+n=254, 
+s=[123456789a123456789b123456789c123456789d123456789e123456789f123456789g1234567
+89h123456789i123456789j123456789k123456789l123456789m123456789n123456789o1234567
+89p123456789q123456789r123456789s123456789t123456789u123456789v123456789w1234567
+89x123456789y1234]
+n=254, 
+s=[56789z123456789A123456789B123456789C123456789D123456789E123456789F123456789G1
+23456789H123456789I123456789J123456789K123456789L123456789M123456789N123456789O1
+23456789P123456789Q123456789R123456789S123456789T123456789U123456789V123456789W1
+23456789X12345678]
+n=12, s=[9Y123456789Z]
+n=0, s=[]
+n=-1, s=[]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+Three more points were possible here; your total is now 15/15
+
+Your grade for this assignment may be adjusted by a (human) grader at the
+due date.  Your grade could be as much as two points lower, depending on what
+you have put in gradernotes, and the quality of your getword.c documentation.
+
+             ------
+Total Points | 15 |  for cssc0095 - Eric Spengler for Program 1
+             |----|
+             | 15 |
+             ------
