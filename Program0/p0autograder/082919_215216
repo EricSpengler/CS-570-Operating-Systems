@@ -1,0 +1,288 @@
+Return-Path: <cssc0095@edoras.sdsu.edu>
+X-Original-To: cssc0095
+Delivered-To: cssc0095@edoras.sdsu.edu
+Received: by edoras.sdsu.edu (Postfix, from userid 1207)
+	id B34A56000048; Thu, 29 Aug 2019 21:52:16 -0700 (PDT)
+Date: Thu, 29 Aug 2019 21:52:16 -0700
+To: cssc0095@edoras.sdsu.edu
+Subject: CS570 Program 0 results
+User-Agent: Heirloom mailx 12.5 7/5/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-Id: <20190830045216.B34A56000048@edoras.sdsu.edu>
+From: cssc0095@edoras.sdsu.edu (Eric Spengler)
+
+This is a **preliminary** test of your upcoming Program 0.
+
+Due dates for our programs can be found in the ~cs570/calendar file on edoras.
+
+Success on this assignment determines your competency in C, and whether or
+not you will be disenrolled from CS570 for lack of prerequisites.
+
+This message, which will appear to be mailed from your account, is intended to
+show you the checks that will be made on your assignment when the due date
+actually arrives.  This is NOT the actual version that will be graded,
+but only an attempt to give you early warning of any potential problems.
+Point totals in the final graded version may differ.
+
+[Standard Disclaimer:]
+These practice tests are intended to show bugs, but also to reveal places
+where you may not be following all the automatic grader's nitpicking
+requirements.  If you receive failure warnings on the preliminary tests
+and then also have difficulty during the graded event, you have very little
+recourse.  To take full advantage of the feedback provided in this course,
+you must do the assignments in a timely fashion.
+jc
+
+Login     Name            Tty      Idle  Login Time   Office     Office Phone   Host
+cssc0095  Eric Spengler   pts/26      *  Aug 29 21:42                           (70.181.188.171)
+
+Checking Program 0:
+Test 0... checking for the proper directory:
+total 8
+drwx------ 2 cssc0095    6 Aug 28 20:00 Four/
+drwx------ 5 cssc0095   52 Aug 27 21:21 Maildir/
+drwx------ 2 cssc0095    6 Aug 28 20:00 One/
+-rw------- 1 cssc0095 1733 Aug 27 00:14 README
+drwx------ 2 cssc0095    6 Aug 28 20:00 Three/
+drwx------ 2 cssc0095    6 Aug 28 20:00 Two/
+drwxr-xr-x 2 cssc0095 4096 Aug 29 21:44 Zero/
+lrwxrwxrwx 1 cssc0095   31 Aug 28 08:38 calendar -> /home/cs/faculty/cs570/calendar
+Good, Zero has been created.
+
+Test 1... did you change your finger info and password?
+Yes.
+
+Test 2... Checking the contents of your .forward file:
+head -20 ~cssc0095/.forward
+\cssc0095,
+espengler1794@sdsu.edu
+One more point was possible here; your total is now 1/1
+
+Test 2... Did you use chsh to change your shell to tcsh?
+grep cssc0095 /etc/passwd
+cssc0095:x:1207:1007:Eric Spengler:/home/cs/carroll/cssc0095:/bin/tcsh
+Good.
+One more point was possible here; your total is now 2/2
+
+/bin/ls -loF ~cssc0095/Zero
+total 32
+-rw-r--r-- 1 cssc0095  1585 Aug 29 20:11 getword.c
+lrwxrwxrwx 1 cssc0095    37 Aug 28 08:51 getword.h -> /home/cs/faculty/cs570/Zero/getword.h
+-rw------- 1 cssc0095  5792 Aug 29 21:44 getword.o
+-rw-r--r-- 1 cssc0095   108 Aug 28 10:08 gradernotes
+lrwxrwxrwx 1 cssc0095    36 Aug 28 08:49 makefile -> /home/cs/faculty/cs570/Zero/makefile
+-rwx------ 1 cssc0095 11408 Aug 29 21:44 p0*
+lrwxrwxrwx 1 cssc0095    32 Aug 28 08:51 p0.c -> /home/cs/faculty/cs570/Zero/p0.c
+-rw------- 1 cssc0095  3408 Aug 29 21:44 p0.o
+Test 3... testing will proceed only if you have created the proper file:
+ls -lo ~/Zero/getword.c
+-rw-r--r-- 1 cssc0095 1585 Aug 29 20:11 /home/cs/carroll/cssc0095/Zero/getword.c
+
+1    /*
+2    I wrote this code myself with the help of L.S.Fosters "C By Discovery" and 
+the inout2.c file.  
+3    This program parses through the input stream and extracts out each individu
+al word, returning
+4    the size of the word as well as pushing the characters onto the input buffe
+r for display. 
+5     
+6    Eric Spengler
+7    09/04/19
+8    Dr. John Carroll
+9    CS570
+10   */
+11   
+12   #include "getword.h"
+13   
+14   int getword(char *word)
+15   {
+16   	//counter for the number of chars in the word
+17   	int numChars = 0;
+18   	//stdin input variable
+19   	int input;
+20   	//looping through the input stream until EOF or a break from inside the 
+loop
+21   	while ((input = getchar()) != EOF)
+22   	{
+23   		//ignoring spaces from the input or exiting the loop if the word
+ is finished due to a space
+24   		if (numChars > 0 && input == ' ')
+25   		{
+26   			break;
+27   		}
+28   		else if (input == ' ')
+29   		{
+30   			continue;
+31   		}
+32   		//pushing newline back on the input stream if at the end of a wo
+rd and handling newline if it's the first char from the input stream
+33   		if (numChars > 0 && input == '\n')
+34   		{
+35   			ungetc('\n', stdin);
+36   			break;
+37   		}
+38   		else if (input == '\n')
+39   		{
+40   			word[numChars] = '\0';	
+41   			return 0;
+42   		}
+43   		//adding the input stream char to word
+44   		word[numChars] = input;
+45   		//incrementing the number of chars
+46   		numChars++;
+47   	}
+48           //adding null terminator to word because it is holding a single wor
+d
+49           word[numChars] = '\0';	
+50   	//handling EOF
+51   	if (numChars == 0 && input == EOF)
+52   	{
+53   		return -1;
+54   	}
+55   	//handling 'done' to return -1
+56   	if (word[0] == 'd' && word[1] == 'o' && word[2] == 'n' && word[3] == 'e'
+ && word[4] == '\0')
+57   	{
+58   		return -1;
+59   	}	
+60   	//returning the number of chars
+61   	return numChars;
+62   }
+
+Test 4... is getword.c documented?
+(Your getword.c documentation does NOT have to repeat the specs in getword.h,
+but it should contain your name, instructor name [NOTE: 'Carroll' contains two
+'R's and two 'L's], class (that is, 'CS570'), due date, etc.)
+Your comments should help explain what the various parts of your code are doing.
+Normally, your comments would be reviewed by a human.  But for this simple
+assignment, the autograder merely checks for the class and instructor name.
+One point was possible here; your total is now 3/3
+
+Test 5... Does the gradernotes file exist?
+Yes.
+Your gradernotes file contains:
+1:I wrote the code myself with the help of Fosters and the inout2.c file
+2:Eric Spengler
+3:cs570
+4:Dr. John Carroll
+
+The autograder is not good at parsing English (no surprise there), so it
+will magnanimously award credit for the mere existence of the file -- but note
+that there are _two_ MANDATORY statements you MUST include in this file.
+Are you SURE you did that?
+
+One more point was possible here; your total is now 4/4
+
+Test 6: Checking all the soft links (calendar, p0 files):
+Is the calendar soft link in place?
+lrwxrwxrwx 1 cssc0095 carroll 31 Aug 28 08:38 /home/cs/carroll/cssc0095/calendar -> /home/cs/faculty/cs570/calendar
+Yes.
+Is the getword.h soft link in place?
+ls -l ~cssc0095/Zero/getword.h
+lrwxrwxrwx 1 cssc0095 carroll 37 Aug 28 08:51 /home/cs/carroll/cssc0095/Zero/getword.h -> /home/cs/faculty/cs570/Zero/getword.h
+Yes.
+Is the makefile soft link in place?
+ls -l ~cssc0095/Zero/makefile
+lrwxrwxrwx 1 cssc0095 carroll 36 Aug 28 08:49 /home/cs/carroll/cssc0095/Zero/makefile -> /home/cs/faculty/cs570/Zero/makefile
+Yes.
+Is the p0.c soft link in place?
+ls -l ~cssc0095/Zero/p0.c
+lrwxrwxrwx 1 cssc0095 carroll 32 Aug 28 08:51 /home/cs/carroll/cssc0095/Zero/p0.c -> /home/cs/faculty/cs570/Zero/p0.c
+Yes.
+Unless ALL these are right, you could LOSE a point here; your total is now 4/4
+
+Likewise, your code should compile cleanly, without any serious warning messages
+from the compiler:
+Test 7... does your program compile?
+make clean; make
+rm -f *.o p0
+gcc -g   -c -o getword.o getword.c
+gcc -g   -c -o p0.o p0.c
+gcc -o p0 getword.o p0.o
+[1] 29819
+
+Test 8... does your program handle the simplest situtations?
+Here is the result of ~cssc0095/Zero/p0 < ~cs570/Data0/input1 :
+
+Your output was:
+n=0, s=[]
+n=10, s=[no-brainer]
+n=3, s=[one]
+n=0, s=[]
+n=0, s=[]
+n=-1, s=[]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+To make any differences easy to see, the actual diff command I used was:
+diff -a myoutput youroutput | cat -vt
+
+One more point was possible here; your total is now 5/5
+
+Test 9... does your program handle leading spaces and no trailing spaces?
+Here is the result of ~cssc0095/Zero/p0 < ~cs570/Data0/input2 :
+
+Your output was:
+n=8, s=[trickier]
+n=2, s=[to]
+n=6, s=[master]
+n=0, s=[]
+n=-1, s=[]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+One more point was possible here; your total is now 6/6
+
+Test 10... how does your program react to a premature EOF?
+Here is the result of ~cssc0095/Zero/p0 < ~cs570/Data0/input3 :
+
+Your output was:
+n=1, s=[a]
+n=4, s=[file]
+n=4, s=[with]
+n=4, s=[zero]
+n=6, s=[lines!]
+n=-1, s=[]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+One more point was possible here; your total is now 7/7
+
+Test 11... does your program handle 'done' correctly?
+Here is the result of ~cssc0095/Zero/p0 < ~cs570/Data0/input4 :
+
+Your output was:
+n=9, s=[isn'tdone]
+n=4, s=[Done]
+n=7, s=[doneNOT]
+n=0, s=[]
+n=3, s=[now]
+n=4, s=[it's]
+n=-1, s=[done]
+
+A diff of the correct output with your output shows:
+                              No differences encountered -- CONGRATULATIONS
+
+One more point was possible here; your total is now 8/8
+
+Your grade for this assignment may be adjusted by a (human) grader at the
+due date.  Your grade could be as much as three points lower, depending on what
+you have put in gradernotes, the presense of 'serious' compiler warnings, and
+the quality of your getword.c documentation.
+NOTE: Even if you get subsequent downgrades for things like documentation, that
+does NOT put you at risk of disenrollment.  If this autograder score is
+8/8, you will NOT be dropped.
+Success on this assignment determines your competency in C, and whether or
+not you will be disenrolled from CS570 for lack of prerequisites.  You
+must have a PERFECT (autograder) score on this assignment to remain enrolled.
+
+             ------
+Total Points | 8  |  for cssc0095 - Eric Spengler for Program 0
+             |----|
+             | 8  |
+             ------

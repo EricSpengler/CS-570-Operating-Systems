@@ -1,0 +1,11 @@
+I wrote this code myself with the help of L.S.Fosters "C By Discovery" and the inout2.c file.
+
+This program has no known bugs.
+
+This program parses through the input stream and extracts out each individual word, returning
+the size of the word as well as pushing the characters onto the input buffer for display.
+
+Eric Spengler
+09/04/19
+Dr. John Carroll
+CS570
